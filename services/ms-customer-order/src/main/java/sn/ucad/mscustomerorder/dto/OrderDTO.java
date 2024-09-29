@@ -10,7 +10,6 @@ import java.util.List;
 public class OrderDTO {
     private Long id;
     private Long clientId;
-    private String orderDate;
     private List<OrderDetailDTO> orderDetails;
 
 }

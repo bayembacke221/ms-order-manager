@@ -52,7 +52,7 @@ public class OrderService extends GenericService<Order, Long> {
         Order order = new Order();
         order.setClient(client);
         order.setOrderDate(
-                orderDTO.getOrderDate() != null ? orderDTO.getOrderDate() : String.valueOf(new Date())
+                String.valueOf(new Date())
         );
         order.setOrderStatus(OrderStatus.CREER);
         order.setOrderDetails(new ArrayList<>());
@@ -97,7 +97,7 @@ public class OrderService extends GenericService<Order, Long> {
         log.info("Updating order: {}", orderId);
 
         Order order = super.findById(orderId);
-        order.setOrderDate(orderDTO.getOrderDate() != null ? orderDTO.getOrderDate() : String.valueOf(new Date()));
+        order.setOrderDate(String.valueOf(new Date()));
         order.setOrderStatus(OrderStatus.CREER);
         order.setOrderDetails(new ArrayList<>());
 

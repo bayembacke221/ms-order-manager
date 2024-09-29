@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/services/ms-customer-order/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/services/ms-paiement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/services/ms-products/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/ms-statistique/src/main/java" charset="UTF-8" />
   </component>
 </project>

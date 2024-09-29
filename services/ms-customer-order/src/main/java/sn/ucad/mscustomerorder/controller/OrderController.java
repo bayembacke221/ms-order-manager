@@ -85,6 +85,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
         Order newOrder = orderService.createOrder(orderDTO);
+
         OrderDTO newOrderDTO = OrderDTOMapper.convertToDTO(newOrder);
         return new ResponseEntity<OrderDTO>(newOrderDTO, HttpStatus.CREATED);
     }

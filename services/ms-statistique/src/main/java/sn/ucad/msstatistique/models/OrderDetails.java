@@ -1,15 +1,14 @@
-package sn.ucad.mscustomerorder.dto;
+package sn.ucad.msstatistique.models;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class OrderDetailDTO {
+public class OrderDetails {
     private Long id;
     private Long orderId;
     private Long productId;
     private Integer quantity;
-
-
+    private BigDecimal unitPrice;
 }

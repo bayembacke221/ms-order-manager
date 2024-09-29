@@ -15,7 +15,6 @@ public class OrderDTOMapper {
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId());
         dto.setClientId(order.getClient().getId());
-        dto.setOrderDate(order.getOrderDate());
 
         List<OrderDetailDTO> detailDTOs = order.getOrderDetails().stream()
                 .map(
@@ -31,7 +30,6 @@ public class OrderDTOMapper {
     public static Order convertToEntity(OrderDTO dto) {
         Order order = new Order();
         order.setId(dto.getId());
-        dto.setOrderDate(order.getOrderDate());
         return order;
     }
 }

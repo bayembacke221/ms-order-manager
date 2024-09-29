@@ -14,7 +14,6 @@ public class OrderDetailDTOMapper {
         dto.setId(detail.getId());
         dto.setProductId(detail.getProduct_id());
         dto.setQuantity(detail.getQuantity());
-        dto.setUnitPrice(detail.getUnitPrice());
         return dto;
     }
 
@@ -24,7 +23,6 @@ public class OrderDetailDTOMapper {
         detail.setId(dto.getId());
         detail.setProduct_id(dto.getProductId());
         detail.setQuantity(dto.getQuantity());
-        detail.setUnitPrice(dto.getUnitPrice());
         return detail;
     }
 
