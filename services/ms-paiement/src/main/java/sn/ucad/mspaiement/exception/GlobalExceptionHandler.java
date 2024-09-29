@@ -1,4 +1,4 @@
-package sn.ucad.mscustomerorder.exception;
+package sn.ucad.mspaiement.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;

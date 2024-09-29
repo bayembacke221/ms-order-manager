@@ -3,6 +3,7 @@ package sn.ucad.mscustomerorder.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import sn.ucad.mscustomerorder.models.enums.OrderStatus;
 
 import java.util.Date;
 import java.util.List;
@@ -21,10 +22,11 @@ public class Order {
     private Client client;
 
     @Column(nullable = false)
-    private Date orderDate;
+    private String orderDate;
 
-    @Column(nullable = false)
-    private String status;
+    @Column(nullable = false,name = "order_status")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;

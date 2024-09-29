@@ -1,13 +1,12 @@
-package sn.ucad.mscustomerorder.service;
+package sn.ucad.mspaiement.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-import sn.ucad.mscustomerorder.exception.ResourceNotFoundException;
-import sn.ucad.mscustomerorder.repository.GenericRepository;
-
+import sn.ucad.mspaiement.exception.ResourceNotFoundException;
+import sn.ucad.mspaiement.repository.GenericRepository;
 
 import java.io.Serializable;
 import java.util.ArrayList;

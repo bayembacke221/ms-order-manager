@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ms-products" />
+        <module name="ms-paiement" />
         <module name="ms-customer-order" />
       </profile>
     </annotationProcessing>
@@ -14,6 +15,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ms-customer-order" options="-parameters" />
+      <module name="ms-paiement" options="-parameters" />
       <module name="ms-products" options="-parameters" />
     </option>
   </component>

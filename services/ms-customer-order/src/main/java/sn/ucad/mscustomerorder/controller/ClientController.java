@@ -43,12 +43,18 @@ public class ClientController {
     public ResponseEntity<ApiCollection<List<ClientDTO>>> getAllClients(@RequestParam(defaultValue = "true") boolean pageable,
                                                                         @RequestParam(defaultValue = "1") int page,
                                                                         @RequestParam(defaultValue = "10") int size) {
-        Map<String, Object> result  = clientService.findAll(pageable, page, size);
+        Page<Client> result  = clientService.findAll(pageable, page, size);
+        List<ClientDTO> clientDTOs = result.getContent().stream()
+                .map(ClientDTOMapper::convertToDTO)
+                .toList();
 
-        if (result.containsKey("totalItems")) {
-            return (ResponseEntity<ApiCollection<List<ClientDTO>>>) ResponseHandler.generateResponse("Liste recuperée", HttpStatus.OK, result.get("data"), (long) result.get("totalItems"), (int) result.get("totalPages"));
-        } else
-            return (ResponseEntity<ApiCollection<List<ClientDTO>>>) ResponseHandler.generateResponse("Liste recuperée", HttpStatus.OK, result.get("data"));
+        ApiCollection<List<ClientDTO>> response = new ApiCollection<>(
+                clientDTOs,
+                result.getTotalElements(),
+                result.getTotalPages()
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get a client by its id")

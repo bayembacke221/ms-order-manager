@@ -2,6 +2,7 @@ package sn.ucad.mscustomerorder.dto.mapper;
 
 import sn.ucad.mscustomerorder.dto.OrderDTO;
 import sn.ucad.mscustomerorder.dto.OrderDetailDTO;
+import sn.ucad.mscustomerorder.helper.utils.DateUtils;
 import sn.ucad.mscustomerorder.models.Order;
 
 import java.util.List;
@@ -15,7 +16,6 @@ public class OrderDTOMapper {
         dto.setId(order.getId());
         dto.setClientId(order.getClient().getId());
         dto.setOrderDate(order.getOrderDate());
-        dto.setStatus(order.getStatus());
 
         List<OrderDetailDTO> detailDTOs = order.getOrderDetails().stream()
                 .map(
@@ -31,8 +31,7 @@ public class OrderDTOMapper {
     public static Order convertToEntity(OrderDTO dto) {
         Order order = new Order();
         order.setId(dto.getId());
-        order.setOrderDate(dto.getOrderDate());
-        order.setStatus(dto.getStatus());
+        dto.setOrderDate(order.getOrderDate());
         return order;
     }
 }

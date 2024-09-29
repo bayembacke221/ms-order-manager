@@ -23,6 +23,7 @@ import sn.ucad.mscustomerorder.service.OrderService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Tag(name = "orders", description = "The orders API")
 @RestController
@@ -44,12 +45,18 @@ public class OrderController {
     public ResponseEntity<ApiCollection<List<OrderDTO>>> getAllOrders(@RequestParam(defaultValue = "true") boolean pageable,
                                                        @RequestParam(defaultValue = "1") int page,
                                                        @RequestParam(defaultValue = "10") int size) {
-        Map<String, Object> result  = orderService.findAll(pageable, page, size);
-        if (result.containsKey("totalItems")) {
-            return (ResponseEntity<ApiCollection<List<OrderDTO>>>) ResponseHandler.generateResponse("Liste recuperée", HttpStatus.OK, result.get("data"), (long) result.get("totalItems"), (int) result.get("totalPages"));
-        } else
-            return (ResponseEntity<ApiCollection<List<OrderDTO>>>) ResponseHandler.generateResponse("Liste recuperée", HttpStatus.OK, result.get("data"));
+        Page<Order> orderPage = orderService.findAll(pageable, page, size);
+        List<OrderDTO> orderDTOs = orderPage.getContent().stream()
+                .map(OrderDTOMapper::convertToDTO)
+                .collect(Collectors.toList());
 
+        ApiCollection<List<OrderDTO>> response = new ApiCollection<>(
+                orderDTOs,
+                orderPage.getTotalElements(),
+                orderPage.getTotalPages()
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get a order by its id")
@@ -110,6 +117,37 @@ public class OrderController {
     public ResponseEntity<OrderDTO> deleteOrder(@PathVariable Long id) {
         orderService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+
+    @Operation(summary = "Get order by id Where Status is Pending")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the order",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = OrderDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Order not found",
+                    content = @Content)
+    })
+    @GetMapping("/status/pending/{id}")
+    public ResponseEntity<OrderDTO> getOrderByIdWhereStatusPending(@PathVariable Long id) {
+        Order order = orderService.getOrderByIdWhereStatusPending(id);
+        OrderDTO orderDTO = OrderDTOMapper.convertToDTO(order);
+        return ResponseEntity.ok(orderDTO);
+    }
+
+    @Operation(summary = "Update status order")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order status updated",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = OrderDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Order status not updated",
+                    content = @Content)
+    })
+    @PutMapping("/status/{id}")
+    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable Long id, @RequestBody Map<String, String> status) {
+        Order order = orderService.updateOrderStatus(id, status.get("status"));
+        OrderDTO orderDTO = OrderDTOMapper.convertToDTO(order);
+        return ResponseEntity.ok(orderDTO);
     }
 
 }

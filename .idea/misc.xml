@@ -6,6 +6,7 @@
       <list>
         <option value="$PROJECT_DIR$/services/ms-products/pom.xml" />
         <option value="$PROJECT_DIR$/services/ms-customer-order/pom.xml" />
+        <option value="$PROJECT_DIR$/services/ms-paiement/pom.xml" />
       </list>
     </option>
   </component>

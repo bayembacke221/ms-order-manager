@@ -10,10 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import sn.ucad.mscustomerorder.dto.ApiCollection;
 import sn.ucad.mscustomerorder.models.Product;
 import sn.ucad.mscustomerorder.service.RestServiceToGetProduct;
 
 import java.util.List;
+import java.util.Objects;
 
 @SpringBootApplication
 @EnableFeignClients
@@ -27,13 +29,11 @@ public class MsCustomerOrderApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Pageable pageable = PageRequest.of(0, 10);
-		ResponseEntity<Page<Product>> products = productService.getAllProducts(
-				pageable
-		);
-		if (products.getBody() != null) {
-			List<Product> productList = products.getBody().getContent();
-			productList.forEach(product -> log.info("Product: {}", product));
+		ResponseEntity<ApiCollection<List<Product>>> products = productService.getAllProducts();
+		if (!Objects.requireNonNull(products.getBody()).getData().isEmpty()) {
+			log.info("Products found: {}", products.getBody().getData());
+		} else {
+			log.info("No product found");
 		}
 	}
 }

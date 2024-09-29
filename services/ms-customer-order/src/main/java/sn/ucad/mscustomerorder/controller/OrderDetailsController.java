@@ -45,12 +45,16 @@ public class OrderDetailsController {
     public ResponseEntity<ApiCollection<List<OrderDetailDTO>>> getAllOrderDetails(@RequestParam(defaultValue = "true") boolean pageable,
                                                                    @RequestParam(defaultValue = "1") int page,
                                                                    @RequestParam(defaultValue = "10") int size) {
-        Map<String, Object> result = orderDetailsService.findAll(pageable, page, size);
-        if (result.containsKey("totalItems")) {
-            return (ResponseEntity<ApiCollection<List<OrderDetailDTO>>>) ResponseHandler.generateResponse("Liste recuperée", HttpStatus.OK, result.get("data"), (long) result.get("totalItems"), (int) result.get("totalPages"));
-        } else
-            return (ResponseEntity<ApiCollection<List<OrderDetailDTO>>>) ResponseHandler.generateResponse("Liste recuperée", HttpStatus.OK, result.get("data"));
+        Page<OrderDetail> result = orderDetailsService.findAll(pageable, page, size);
+        List<OrderDetailDTO> orderDetailDTOs = OrderDetailDTOMapper.convertToDTOs(result.getContent());
 
+        ApiCollection<List<OrderDetailDTO>> response = new ApiCollection<>(
+                orderDetailDTOs,
+                result.getTotalElements(),
+                result.getTotalPages()
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get a order detail by its id")
