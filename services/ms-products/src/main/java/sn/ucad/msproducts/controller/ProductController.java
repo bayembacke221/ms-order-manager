@@ -13,17 +13,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sn.ucad.msproducts.dto.ApiCollection;
 import sn.ucad.msproducts.dto.ProductDTO;
 import sn.ucad.msproducts.dto.ProductDTOMapper;
+import sn.ucad.msproducts.helper.ResponseHandler;
 import sn.ucad.msproducts.models.Product;
 import sn.ucad.msproducts.service.ProductService;
 
 
+import java.util.List;
+import java.util.Map;
+
 import static sn.ucad.msproducts.dto.ProductDTOMapper.convertToDTO;
 import static sn.ucad.msproducts.dto.ProductDTOMapper.convertToEntity;
+
+
 @Tag(name = "products", description = "The products API")
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/v1/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -42,12 +49,16 @@ public class ProductController {
                     content = @Content)
     })
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> getAllProducts(Pageable pageable) {
-        Page<Product> products = productService.findAll(pageable);
-        Page<ProductDTO> productDTOs = products.map(
-                ProductDTOMapper::convertToDTO
-        );
-        return ResponseEntity.ok(productDTOs);
+    public ResponseEntity<ApiCollection<List<ProductDTO>>> getAllProducts(@RequestParam(defaultValue = "true") boolean pageable,
+                                                                          @RequestParam(defaultValue = "1") int page,
+                                                                          @RequestParam(defaultValue = "10") int size) {
+        Map<String, Object> result = productService.findAll(pageable, page, size);
+
+        if (result.containsKey("totalItems")) {
+            return (ResponseEntity<ApiCollection<List<ProductDTO>>>) ResponseHandler.generateResponse("Liste recuperée", HttpStatus.OK, result.get("data"), (long) result.get("totalItems"), (int) result.get("totalPages"));
+        } else
+            return (ResponseEntity<ApiCollection<List<ProductDTO>>>) ResponseHandler.generateResponse("Liste recuperée", HttpStatus.OK, result.get("data"));
+
     }
 
     @Operation(summary = "Get a product by its id")

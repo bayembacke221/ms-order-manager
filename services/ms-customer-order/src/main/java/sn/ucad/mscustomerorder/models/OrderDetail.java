@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
+
 @Data
 @Slf4j
 @Entity
@@ -21,5 +23,9 @@ public class OrderDetail {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    @Column(nullable = false)
+    private BigDecimal unitPrice;
+
 
 }

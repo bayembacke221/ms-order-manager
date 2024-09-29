@@ -1,6 +1,7 @@
 package sn.ucad.mscustomerorder.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import sn.ucad.mscustomerorder.exception.ResourceNotFoundException;
@@ -8,6 +9,10 @@ import sn.ucad.mscustomerorder.repository.GenericRepository;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class GenericService<T, ID extends Serializable> {
 
@@ -18,8 +23,20 @@ public abstract class GenericService<T, ID extends Serializable> {
     }
 
     @Transactional(readOnly = true)
-    public Page<T> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Map<String, Object> findAll(boolean pageable, int page, int size) {
+        Map<String, Object> result = new HashMap<>();
+        List<T> items = new ArrayList<T>();
+        if (!pageable){
+            items= repository.findAll();
+        }else {
+            Pageable paging = PageRequest.of(page-1, size);
+            Page<T> pageTuts=repository.findAll(paging);
+            items = new ArrayList<>(pageTuts.getContent());
+            result.put("totalItems", pageTuts.getTotalElements());
+            result.put("totalPages", pageTuts.getTotalPages());
+        }
+        result.put("data", items);
+        return result;
     }
 
     @Transactional(readOnly = true)
